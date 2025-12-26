@@ -1,357 +1,328 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Media Booster</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-        
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #05070a;
-            color: #e2e8f0;
-            overflow-x: hidden;
-        }
+import React, { useState, useEffect } from 'react';
+import { initializeApp } from 'firebase/app';
+import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from 'firebase/auth';
+import { getFirestore, collection, doc, setDoc, onSnapshot, updateDoc, increment, query, deleteDoc } from 'firebase/firestore';
+import { 
+  Youtube, 
+  Instagram, 
+  Facebook, 
+  Music2, 
+  Heart, 
+  UserPlus, 
+  Zap, 
+  Settings, 
+  Plus, 
+  Trash2,
+  Play,
+  X
+} from 'lucide-react';
 
-        .glass { 
-            background: rgba(15, 23, 42, 0.8);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
+// --- Firebase Configuration & Environment Variables ---
+// Using global variables provided by the environment instead of import.meta.env
+const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {};
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+const appId = typeof __app_id !== 'undefined' ? __app_id : 'social-booster-v2';
 
-        .video-card {
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: fadeIn 0.5s ease forwards;
-        }
+const App = () => {
+  const [user, setUser] = useState(null);
+  const [currentTab, setCurrentTab] = useState('all');
+  const [videos, setVideos] = useState([]);
+  const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [hasInteracted, setHasInteracted] = useState(false);
+  const [formData, setFormData] = useState({ platform: 'youtube', url: '', creator: '' });
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+  // 1. Auth & Initialization (Rule 3: Auth before queries)
+  useEffect(() => {
+    const initAuth = async () => {
+      try {
+        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+          await signInWithCustomToken(auth, __initial_auth_token);
+        } else {
+          await signInAnonymously(auth);
         }
+      } catch (err) {
+        console.error("Authentication failed:", err);
+      }
+    };
+    initAuth();
+    const unsubscribe = onAuthStateChanged(auth, setUser);
+    return () => unsubscribe();
+  }, []);
 
-        .video-container {
-            position: relative;
-            padding-bottom: 177%; /* 9:16 Ratio */
-            height: 0;
-            overflow: hidden;
-            border-radius: 16px;
-            background: #000;
-            box-shadow: 0 10px 30px -10px rgba(0,0,0,0.5);
-        }
+  // 2. Data Fetching (Rule 1 & 2: Strict paths and simple queries)
+  useEffect(() => {
+    if (!user) return;
 
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: 0;
-        }
+    // Correct path: /artifacts/{appId}/public/data/{collectionName}
+    const videoCollection = collection(db, 'artifacts', appId, 'public', 'data', 'videos');
+    const q = query(videoCollection);
 
-        .nav-btn.active {
-            background: #3b82f6;
-            color: white;
-            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
-        }
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      // Sort in memory as per Rule 2 (No complex queries)
+      const sortedData = data.sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+      setVideos(sortedData);
+    }, (error) => {
+      console.error("Firestore Error:", error);
+    });
 
-        .admin-modal {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 100;
-            background: rgba(0,0,0,0.9);
-            backdrop-filter: blur(5px);
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .admin-active .admin-modal {
-            display: flex;
-        }
+    return () => unsubscribe();
+  }, [user]);
 
-        /* Platform specific colors */
-        .platform-youtube { color: #ff0000; }
-        .platform-tiktok { color: #00f2ea; }
-        .platform-instagram { color: #e1306c; }
-        .platform-facebook { color: #1877f2; }
-    </style>
-</head>
-<body class="min-h-screen">
+  // --- Handlers ---
+  const extractId = (url, platform) => {
+    try {
+      if (url.includes('shorts/')) return url.split('shorts/')[1].split('?')[0];
+      if (url.includes('v=')) return url.split('v=')[1].split('&')[0];
+      if (url.includes('video/')) return url.split('video/')[1].split('?')[0];
+      if (url.includes('reel/')) return url.split('reel/')[1].split('/')[0].split('?')[0];
+      return url.split('/').pop().split('?')[0] || url;
+    } catch (e) { return url; }
+  };
 
-    <!-- Sidebar / Top Navigation -->
-    <nav class="fixed top-0 w-full z-50 glass px-6 py-4 flex flex-col md:flex-row justify-between items-center gap-4">
-        <div class="flex items-center gap-2">
-            <div class="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center font-bold">B</div>
-            <h1 class="text-xl font-bold tracking-tight">BOOST<span class="text-blue-500">HUB</span></h1>
+  const handleAddVideo = async (e) => {
+    e.preventDefault();
+    if (!user) return;
+    const vId = extractId(formData.url, formData.platform);
+    
+    // Strict Path adherence
+    const newDocRef = doc(collection(db, 'artifacts', appId, 'public', 'data', 'videos'));
+    
+    await setDoc(newDocRef, {
+      platform: formData.platform,
+      creator: formData.creator,
+      videoId: vId,
+      originalUrl: formData.url,
+      likes: 0,
+      views: 0,
+      follows: 0,
+      createdAt: Date.now()
+    });
+    
+    setFormData({ platform: 'youtube', url: '', creator: '' });
+  };
+
+  const handleAction = async (videoId, type) => {
+    if (!user) return;
+    const videoRef = doc(db, 'artifacts', appId, 'public', 'data', 'videos', videoId);
+    
+    try {
+      await updateDoc(videoRef, {
+        [type]: increment(1),
+        views: increment(1)
+      });
+
+      const video = videos.find(v => v.id === videoId);
+      if (type === 'follows' || type === 'likes') {
+         window.open(video.originalUrl, '_blank');
+      }
+    } catch (err) {
+      console.error("Update failed:", err);
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!user) return;
+    try {
+      const videoRef = doc(db, 'artifacts', appId, 'public', 'data', 'videos', id);
+      await deleteDoc(videoRef);
+    } catch (err) {
+      console.error("Delete failed:", err);
+    }
+  };
+
+  const getEmbedUrl = (video) => {
+    switch(video.platform) {
+      case 'youtube': return `https://www.youtube.com/embed/${video.videoId}?autoplay=1&mute=1&loop=1&playlist=${video.videoId}`;
+      case 'tiktok': return `https://www.tiktok.com/embed/v2/${video.videoId}`;
+      case 'instagram': return `https://www.instagram.com/reel/${video.videoId}/embed/`;
+      case 'facebook': return `https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/reel/${video.videoId}/&show_text=0&autoplay=true`;
+      default: return '';
+    }
+  };
+
+  const filteredVideos = currentTab === 'all' ? videos : videos.filter(v => v.platform === currentTab);
+
+  if (!hasInteracted) {
+    return (
+      <div className="fixed inset-0 bg-black flex flex-col items-center justify-center p-6 text-center z-[2000]">
+        <div className="w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center mb-8 animate-pulse shadow-[0_0_50px_rgba(37,99,235,0.5)]">
+          <Play size={48} fill="white" color="white" />
         </div>
-
-        <div class="flex bg-slate-900/50 p-1 rounded-xl gap-1 overflow-x-auto max-w-full">
-            <button onclick="setTab('all')" id="tab-all" class="nav-btn active px-4 py-2 rounded-lg text-sm font-medium transition-all">All</button>
-            <button onclick="setTab('youtube')" id="tab-youtube" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2">
-                YouTube
-            </button>
-            <button onclick="setTab('tiktok')" id="tab-tiktok" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2">
-                TikTok
-            </button>
-            <button onclick="setTab('instagram')" id="tab-instagram" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2">
-                Instagram
-            </button>
-            <button onclick="setTab('facebook')" id="tab-facebook" class="nav-btn px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2">
-                Facebook
-            </button>
-        </div>
-
-        <button onclick="toggleAdmin()" class="bg-slate-800 hover:bg-slate-700 text-white px-4 py-2 rounded-lg text-sm flex items-center gap-2 transition-all">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-            Admin Panel
+        <h1 className="text-4xl font-bold text-white mb-4">Community Booster</h1>
+        <p className="text-gray-400 max-w-md mb-8 text-lg">
+          Join the hub to help creators grow. Watch, Like, and Follow to boost their visibility across all platforms.
+        </p>
+        <button 
+          onClick={() => setHasInteracted(true)}
+          className="bg-blue-600 hover:bg-blue-500 text-white px-12 py-4 rounded-2xl font-bold text-xl transition-all hover:scale-105 active:scale-95 shadow-xl"
+        >
+          START BOOSTING
         </button>
-    </nav>
+      </div>
+    );
+  }
 
-    <!-- Main Content Area -->
-    <main class="pt-32 pb-12 px-6">
-        <div id="activeCategoryTitle" class="max-w-6xl mx-auto mb-8">
-            <h2 class="text-3xl font-bold capitalize">All Videos</h2>
-            <p class="text-slate-400">Click and watch to support creators</p>
+  return (
+    <div className="min-h-screen bg-[#05070a] text-gray-100 pb-20">
+      {/* Navigation */}
+      <nav className="sticky top-0 z-50 bg-[#0f172a]/80 backdrop-blur-xl border-b border-white/10 px-6 py-4 flex justify-between items-center">
+        <div className="flex items-center gap-2">
+          <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-xl flex items-center justify-center font-black shadow-lg shadow-blue-500/20">B</div>
+          <h1 className="text-xl font-bold tracking-tighter hidden sm:block uppercase">Boost<span className="text-blue-500">Center</span></h1>
         </div>
 
-        <div id="videoGrid" class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            <!-- Videos dynamically injected here -->
+        <div className="flex bg-black/40 p-1.5 rounded-2xl border border-white/5 gap-1 overflow-x-auto">
+          {['all', 'youtube', 'tiktok', 'instagram', 'facebook'].map(tab => (
+            <button
+              key={tab}
+              onClick={() => setCurrentTab(tab)}
+              className={`px-4 py-2 rounded-xl text-xs font-bold transition-all uppercase whitespace-nowrap ${currentTab === tab ? 'bg-blue-600 text-white shadow-lg' : 'text-gray-500 hover:text-white'}`}
+            >
+              {tab === 'all' ? 'Feed' : tab === 'youtube' ? 'YT' : tab === 'tiktok' ? 'TT' : tab === 'instagram' ? 'IG' : 'FB'}
+            </button>
+          ))}
         </div>
 
-        <!-- Empty State -->
-        <div id="emptyState" class="hidden flex flex-col items-center justify-center py-20 text-slate-500">
-            <div class="bg-slate-900 p-6 rounded-full mb-4">
-                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h8"/><path d="m21 19-3-3 3-3"/><path d="M10 9l5 3-5 3V9z"/></svg>
+        <button onClick={() => setIsAdminOpen(true)} className="p-3 bg-white/5 rounded-2xl hover:bg-white/10 transition-colors">
+          <Settings size={20} />
+        </button>
+      </nav>
+
+      {/* Main Feed */}
+      <main className="max-w-7xl mx-auto p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+        {filteredVideos.map((video) => (
+          <div key={video.id} className="group relative flex flex-col bg-[#111827] rounded-[2rem] border border-white/5 overflow-hidden transition-all hover:border-blue-500/50 hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+            <div className="relative aspect-[9/16] bg-black">
+              <iframe 
+                src={getEmbedUrl(video)}
+                className="absolute inset-0 w-full h-full"
+                allow="autoplay; encrypted-media"
+                allowFullScreen
+              />
+              <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-md p-2 rounded-full border border-white/10">
+                {video.platform === 'youtube' && <Youtube size={16} className="text-red-500" />}
+                {video.platform === 'tiktok' && <Music2 size={16} className="text-cyan-400" />}
+                {video.platform === 'instagram' && <Instagram size={16} className="text-pink-500" />}
+                {video.platform === 'facebook' && <Facebook size={16} className="text-blue-500" />}
+              </div>
             </div>
-            <h3 class="text-xl font-semibold text-slate-300">No videos in this category</h3>
-            <p>Admin hasn't uploaded any content for this platform yet.</p>
-        </div>
-    </main>
 
-    <!-- Admin Panel Modal -->
-    <div id="adminPanel" class="admin-modal">
-        <div class="glass w-full max-w-2xl p-8 rounded-3xl mx-4 shadow-2xl">
-            <div class="flex justify-between items-center mb-8">
+            <div className="p-5 space-y-4">
+              <div className="flex justify-between items-start">
                 <div>
-                    <h2 class="text-2xl font-bold">Admin Manager</h2>
-                    <p class="text-sm text-slate-400">Add new links to increase views</p>
+                  <h3 className="font-bold text-lg leading-tight truncate max-w-[150px]">{video.creator}</h3>
+                  <div className="flex items-center gap-3 text-xs text-gray-500 mt-1 font-medium">
+                    <span className="flex items-center gap-1"><Zap size={12} className="text-yellow-500" /> {video.views || 0}</span>
+                    <span className="flex items-center gap-1"><Heart size={12} className="text-red-500" /> {video.likes || 0}</span>
+                  </div>
                 </div>
-                <button onclick="toggleAdmin()" class="bg-slate-800 p-2 rounded-full hover:bg-slate-700 transition-all">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+              </div>
+
+              <div className="grid grid-cols-3 gap-2">
+                <button 
+                  onClick={() => handleAction(video.id, 'likes')}
+                  className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white/5 hover:bg-red-500/10 hover:text-red-400 transition-all border border-transparent hover:border-red-500/30"
+                >
+                  <Heart size={20} />
+                  <span className="text-[10px] font-bold mt-1 uppercase">Like</span>
                 </button>
+                <button 
+                  onClick={() => handleAction(video.id, 'follows')}
+                  className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white/5 hover:bg-blue-500/10 hover:text-blue-400 transition-all border border-transparent hover:border-blue-500/30"
+                >
+                  <UserPlus size={20} />
+                  <span className="text-[10px] font-bold mt-1 uppercase">Follow</span>
+                </button>
+                <button 
+                  onClick={() => handleAction(video.id, 'views')}
+                  className="flex flex-col items-center justify-center p-3 rounded-2xl bg-white/5 hover:bg-yellow-500/10 hover:text-yellow-400 transition-all border border-transparent hover:border-yellow-500/30"
+                >
+                  <Zap size={20} />
+                  <span className="text-[10px] font-bold mt-1 uppercase">Boost</span>
+                </button>
+              </div>
             </div>
-            
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Add Form -->
-                <form id="addVideoForm" class="space-y-4">
-                    <h3 class="text-lg font-semibold text-blue-400 border-b border-slate-700 pb-2">Add Content</h3>
-                    <div>
-                        <label class="block text-xs uppercase tracking-wider text-slate-500 mb-2">Platform</label>
-                        <select id="platformSelect" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none">
-                            <option value="youtube">YouTube Shorts</option>
-                            <option value="tiktok">TikTok</option>
-                            <option value="instagram">Instagram</option>
-                            <option value="facebook">Facebook</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-xs uppercase tracking-wider text-slate-500 mb-2">Video ID or Full URL</label>
-                        <input type="text" id="videoUrlInput" placeholder="Paste link here..." class="w-full bg-slate-950 border border-slate-800 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" required>
-                    </div>
-                    <div>
-                        <label class="block text-xs uppercase tracking-wider text-slate-500 mb-2">Creator Name</label>
-                        <input type="text" id="creatorInput" placeholder="@username" class="w-full bg-slate-950 border border-slate-800 p-3 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" required>
-                    </div>
-                    <button type="submit" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-4 rounded-xl transition-all flex items-center justify-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                        Upload to Category
-                    </button>
-                </form>
+          </div>
+        ))}
+      </main>
 
-                <!-- Current List -->
-                <div>
-                    <h3 class="text-lg font-semibold text-slate-300 border-b border-slate-700 pb-2 mb-4">Manage Feed</h3>
-                    <div id="adminList" class="space-y-3 max-h-[350px] overflow-y-auto pr-2 custom-scrollbar">
-                        <!-- Items list -->
-                    </div>
+      {/* Admin Panel Overlay */}
+      {isAdminOpen && (
+        <div className="fixed inset-0 z-[100] bg-black/90 backdrop-blur-md flex items-center justify-center p-4">
+          <div className="bg-[#0f172a] w-full max-w-lg rounded-[2.5rem] border border-white/10 shadow-2xl overflow-hidden">
+            <div className="p-8 border-b border-white/5 flex justify-between items-center">
+              <div>
+                <h2 className="text-2xl font-bold">Admin Hub</h2>
+                <p className="text-gray-400 text-sm">Add new videos to the global feed</p>
+              </div>
+              <button onClick={() => setIsAdminOpen(false)} className="p-3 bg-white/5 rounded-full hover:bg-white/10">
+                <X size={20} />
+              </button>
+            </div>
+
+            <form onSubmit={handleAddVideo} className="p-8 space-y-6">
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  {['youtube', 'tiktok', 'instagram', 'facebook'].map(p => (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => setFormData({...formData, platform: p})}
+                      className={`py-3 rounded-xl text-xs font-bold uppercase border-2 transition-all ${formData.platform === p ? 'bg-blue-600 border-blue-600 text-white' : 'border-white/10 bg-white/5 text-gray-500'}`}
+                    >
+                      {p}
+                    </button>
+                  ))}
                 </div>
+                <input 
+                  type="text" 
+                  placeholder="Paste URL or ID here..." 
+                  className="w-full bg-black/40 border border-white/10 p-4 rounded-2xl outline-none focus:border-blue-500 transition-colors"
+                  value={formData.url}
+                  onChange={e => setFormData({...formData, url: e.target.value})}
+                  required
+                />
+                <input 
+                  type="text" 
+                  placeholder="Creator Name (@username)" 
+                  className="w-full bg-black/40 border border-white/10 p-4 rounded-2xl outline-none focus:border-blue-500 transition-colors"
+                  value={formData.creator}
+                  onChange={e => setFormData({...formData, creator: e.target.value})}
+                  required
+                />
+              </div>
+              <button type="submit" className="w-full bg-blue-600 hover:bg-blue-500 py-4 rounded-2xl font-bold text-lg shadow-xl shadow-blue-500/20 transition-all active:scale-95">
+                UPLOAD & BROADCAST
+              </button>
+            </form>
+
+            <div className="p-8 bg-black/20 border-t border-white/5 max-h-48 overflow-y-auto">
+              <h4 className="text-xs font-bold uppercase tracking-widest text-gray-500 mb-4">Live Content ({videos.length})</h4>
+              <div className="space-y-2">
+                {videos.map(v => (
+                  <div key={v.id} className="flex justify-between items-center bg-white/5 p-3 rounded-xl border border-white/5 text-sm">
+                    <span className="truncate max-w-[200px]">{v.creator} • {v.platform}</span>
+                    <button onClick={() => handleDelete(v.id)} className="text-red-500 hover:text-red-400 p-2"><Trash2 size={16} /></button>
+                  </div>
+                ))}
+              </div>
             </div>
+          </div>
         </div>
+      )}
+
+      {/* Empty State */}
+      {videos.length === 0 && (
+        <div className="text-center py-40 opacity-50">
+          <Zap size={48} className="mx-auto mb-4" />
+          <p className="text-xl">The feed is waiting for your first boost.</p>
+        </div>
+      )}
     </div>
+  );
+};
 
-    <!-- Notification -->
-    <div id="toast" class="fixed bottom-8 left-1/2 -translate-x-1/2 bg-white text-black px-8 py-3 rounded-full font-bold shadow-2xl opacity-0 transition-all pointer-events-none z-[200]">
-        Action successful!
-    </div>
-
-    <script>
-        // Data Structure
-        let currentTab = 'all';
-        let videos = JSON.parse(localStorage.getItem('booster_vault')) || [
-            { id: 1, platform: 'youtube', creator: '@ViralGlobal', videoId: '868z-Y9Wv8k' },
-            { id: 2, platform: 'tiktok', creator: '@DanceStar', videoId: '7292273187216690437' },
-            { id: 3, platform: 'instagram', creator: '@FitLifestyle', videoId: 'C8P8L_gJ5Yh' }
-        ];
-
-        // UI Selectors
-        const videoGrid = document.getElementById('videoGrid');
-        const adminList = document.getElementById('adminList');
-        const emptyState = document.getElementById('emptyState');
-        const activeTitle = document.querySelector('#activeCategoryTitle h2');
-
-        // Tab Navigation
-        function setTab(tab) {
-            currentTab = tab;
-            
-            // Update UI buttons
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            document.getElementById(`tab-${tab}`).classList.add('active');
-            
-            // Update title
-            activeTitle.innerText = tab === 'all' ? 'All Videos' : `${tab} Feed`;
-            
-            renderFeed();
-        }
-
-        function toggleAdmin() {
-            document.body.classList.toggle('admin-active');
-            if(document.body.classList.contains('admin-active')) renderAdminList();
-        }
-
-        // Logic
-        function extractId(url, platform) {
-            try {
-                if (platform === 'youtube') {
-                    if (url.includes('shorts/')) return url.split('shorts/')[1].split('?')[0];
-                    if (url.includes('v=')) return url.split('v=')[1].split('&')[0];
-                }
-                if (platform === 'tiktok') {
-                    if (url.includes('video/')) return url.split('video/')[1].split('?')[0];
-                }
-                if (platform === 'instagram') {
-                    if (url.includes('reel/')) return url.split('reel/')[1].split('/')[0];
-                    if (url.includes('p/')) return url.split('p/')[1].split('/')[0];
-                }
-                if (platform === 'facebook') {
-                    if (url.includes('reel/')) return url.split('reel/')[1].replace('/', '');
-                }
-                return url.split('/').pop().split('?')[0] || url;
-            } catch (e) { return url; }
-        }
-
-        function getEmbedUrl(video) {
-            switch(video.platform) {
-                case 'youtube': return `https://www.youtube.com/embed/${video.videoId}?autoplay=0`;
-                case 'tiktok': return `https://www.tiktok.com/embed/v2/${video.videoId}`;
-                case 'instagram': return `https://www.instagram.com/reel/${video.videoId}/embed`;
-                case 'facebook': return `https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/reel/${video.videoId}/&show_text=0`;
-                default: return '';
-            }
-        }
-
-        function renderFeed() {
-            videoGrid.innerHTML = '';
-            const filtered = currentTab === 'all' ? videos : videos.filter(v => v.platform === currentTab);
-
-            if (filtered.length === 0) {
-                emptyState.classList.remove('hidden');
-                return;
-            }
-            
-            emptyState.classList.add('hidden');
-
-            filtered.forEach(video => {
-                const card = document.createElement('div');
-                card.className = 'video-card';
-                card.innerHTML = `
-                    <div class="video-container">
-                        <iframe src="${getEmbedUrl(video)}" allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share" allowfullscreen></iframe>
-                    </div>
-                    <div class="mt-4 flex items-center justify-between">
-                        <div>
-                            <p class="font-bold text-white">${video.creator}</p>
-                            <span class="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 uppercase font-bold tracking-tighter platform-${video.platform}">
-                                ${video.platform}
-                            </span>
-                        </div>
-                        <button onclick="boost('${video.videoId}')" class="text-blue-400 hover:text-blue-300 transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg>
-                        </button>
-                    </div>
-                `;
-                videoGrid.appendChild(card);
-            });
-        }
-
-        function renderAdminList() {
-            adminList.innerHTML = '';
-            videos.forEach(v => {
-                const item = document.createElement('div');
-                item.className = 'flex items-center justify-between bg-slate-950 p-3 rounded-xl border border-slate-800 text-xs';
-                item.innerHTML = `
-                    <div class="flex flex-col">
-                        <span class="font-bold text-white">${v.creator}</span>
-                        <span class="text-slate-500 uppercase text-[9px]">${v.platform} • ID: ${v.videoId}</span>
-                    </div>
-                    <button onclick="deleteVideo(${v.id})" class="text-red-500 hover:bg-red-500/10 p-2 rounded-lg transition-all">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
-                    </button>
-                `;
-                adminList.appendChild(item);
-            });
-        }
-
-        function deleteVideo(id) {
-            videos = videos.filter(v => v.id !== id);
-            localStorage.setItem('booster_vault', JSON.stringify(videos));
-            renderFeed();
-            renderAdminList();
-            showToast("Content deleted.");
-        }
-
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            toast.innerText = msg;
-            toast.style.opacity = '1';
-            toast.style.bottom = '32px';
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                toast.style.bottom = '24px';
-            }, 3000);
-        }
-
-        function boost(id) {
-            showToast("Video boosted! Views updating...");
-        }
-
-        // Form Handlers
-        document.getElementById('addVideoForm').onsubmit = (e) => {
-            e.preventDefault();
-            const platform = document.getElementById('platformSelect').value;
-            const urlInput = document.getElementById('videoUrlInput').value;
-            const creator = document.getElementById('creatorInput').value;
-
-            const videoId = extractId(urlInput, platform);
-
-            const newItem = {
-                id: Date.now(),
-                platform,
-                creator,
-                videoId
-            };
-
-            videos.unshift(newItem);
-            localStorage.setItem('booster_vault', JSON.stringify(videos));
-            renderFeed();
-            renderAdminList();
-            e.target.reset();
-            showToast(`${platform} video added!`);
-        };
-
-        // Init
-        window.onload = renderFeed;
-    </script>
-</body>
-</html>
+export default App;
