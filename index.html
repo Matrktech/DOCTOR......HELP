@@ -3,272 +3,297 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Social Booster Global - Live Hub</title>
+    <title>Jackie and Topher Infant School | Nurturing Bright Futures</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Firebase SDKs -->
-    <script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/11.0.2/firebase-firestore-compat.js"></script>
-    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap');
-        
         body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #030405;
-            color: #ffffff;
-            overflow-x: hidden;
+            font-family: 'Nunito', sans-serif;
         }
-
-        .video-aspect {
-            aspect-ratio: 9 / 16;
-            background: #000;
-            border-radius: 24px;
-            overflow: hidden;
-            position: relative;
+        h1, h2, h3, .brand-font {
+            font-family: 'Quicksand', sans-serif;
         }
-
-        .glass-nav {
-            background: rgba(10, 12, 15, 0.8);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        .hero-gradient {
+            background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
         }
-
-        .boost-card {
-            background: #0d0f12;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 32px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        .blob-shape {
+            border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
         }
-
-        .boost-card:hover {
-            border-color: #3b82f6;
-            transform: translateY(-4px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        .card-hover {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
-        /* Hide scrollbar but keep functionality */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        scroll-behavior: smooth;
     </style>
 </head>
-<body class="min-h-screen">
-
-    <!-- Entry Interaction Overlay -->
-    <div id="entryOverlay" class="fixed inset-0 z-[1000] bg-black flex flex-col items-center justify-center p-6 text-center">
-        <div class="mb-8 w-24 h-24 bg-blue-600 rounded-full flex items-center justify-center animate-bounce shadow-[0_0_50px_rgba(37,99,235,0.4)]">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="white"><path d="m7 4 12 8-12 8V4z"/></svg>
-        </div>
-        <h1 class="text-4xl font-extrabold mb-4">Social Booster Hub</h1>
-        <p class="text-slate-400 max-w-sm mb-10">Click below to start the autoplay engine and boost community views.</p>
-        <button onclick="unlockApp()" class="bg-blue-600 hover:bg-blue-500 text-white px-12 py-4 rounded-2xl font-bold text-xl transition-all shadow-xl shadow-blue-600/20">
-            LAUNCH ENGINE
-        </button>
-    </div>
+<body class="bg-slate-50 text-slate-800">
 
     <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 glass-nav px-6 py-4 flex justify-between items-center">
-        <div class="flex items-center gap-2">
-            <div class="w-10 h-10 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-xl flex items-center justify-center font-black">B</div>
-            <h1 class="text-xl font-bold hidden md:block">BOOST<span class="text-blue-500">PRO</span></h1>
-        </div>
-
-        <div class="flex bg-white/5 p-1 rounded-2xl border border-white/5 gap-1 no-scrollbar overflow-x-auto">
-            <button onclick="filter('all')" class="tab-btn active bg-blue-600 text-white px-5 py-2 rounded-xl text-xs font-bold uppercase transition-all">All</button>
-            <button onclick="filter('youtube')" class="tab-btn text-slate-500 px-5 py-2 rounded-xl text-xs font-bold uppercase transition-all hover:text-white">YT</button>
-            <button onclick="filter('tiktok')" class="tab-btn text-slate-500 px-5 py-2 rounded-xl text-xs font-bold uppercase transition-all hover:text-white">TT</button>
-            <button onclick="filter('instagram')" class="tab-btn text-slate-500 px-5 py-2 rounded-xl text-xs font-bold uppercase transition-all hover:text-white">IG</button>
-            <button onclick="filter('facebook')" class="tab-btn text-slate-500 px-5 py-2 rounded-xl text-xs font-bold uppercase transition-all hover:text-white">FB</button>
-        </div>
-
-        <button onclick="openAdmin()" class="p-3 bg-white/5 rounded-2xl hover:bg-white/10 transition-all">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
-        </button>
-    </nav>
-
-    <!-- Content Grid -->
-    <main class="pt-28 pb-20 px-6 max-w-7xl mx-auto">
-        <div id="videoGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-            <!-- Videos injected here -->
-        </div>
-    </main>
-
-    <!-- Admin Panel -->
-    <div id="adminPanel" class="fixed inset-0 z-[100] bg-black/95 backdrop-blur-md hidden flex items-center justify-center p-4">
-        <div class="bg-[#0d0f12] w-full max-w-lg rounded-[2.5rem] border border-white/10 shadow-2xl overflow-hidden">
-            <div class="p-8 border-b border-white/5 flex justify-between items-center">
-                <h2 class="text-2xl font-bold">Admin Hub</h2>
-                <button onclick="closeAdmin()" class="text-slate-500 hover:text-white text-2xl">✕</button>
-            </div>
-            <div class="p-8 space-y-6">
-                <div class="grid grid-cols-4 gap-2" id="platformChoice">
-                    <button onclick="setPlatform('youtube')" class="plt-btn active bg-blue-600 p-2 rounded-lg text-[10px] font-bold uppercase">YT</button>
-                    <button onclick="setPlatform('tiktok')" class="plt-btn bg-white/5 p-2 rounded-lg text-[10px] font-bold uppercase">TT</button>
-                    <button onclick="setPlatform('instagram')" class="plt-btn bg-white/5 p-2 rounded-lg text-[10px] font-bold uppercase">IG</button>
-                    <button onclick="setPlatform('facebook')" class="plt-btn bg-white/5 p-2 rounded-lg text-[10px] font-bold uppercase">FB</button>
+    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center gap-2">
+                    <div class="bg-yellow-400 p-2 rounded-lg">
+                        <i class="fas fa-child text-2xl text-white"></i>
+                    </div>
+                    <span class="text-2xl font-bold text-indigo-900 tracking-tight">Jackie & Topher</span>
                 </div>
-                <input type="text" id="urlInput" placeholder="Paste Video URL..." class="w-full bg-black border border-white/10 p-4 rounded-2xl outline-none focus:border-blue-500">
-                <input type="text" id="creatorInput" placeholder="Creator Name" class="w-full bg-black border border-white/10 p-4 rounded-2xl outline-none focus:border-blue-500">
-                <button onclick="addVideo()" class="w-full bg-blue-600 py-4 rounded-2xl font-bold hover:bg-blue-500 transition-all shadow-xl shadow-blue-600/20">
-                    PUSH TO FEED
+                
+                <div class="hidden md:flex space-x-8 font-semibold text-slate-600">
+                    <a href="#home" class="hover:text-yellow-500 transition">Home</a>
+                    <a href="#about" class="hover:text-yellow-500 transition">About</a>
+                    <a href="#curriculum" class="hover:text-yellow-500 transition">Curriculum</a>
+                    <a href="#admissions" class="hover:text-yellow-500 transition">Admissions</a>
+                    <a href="#contact" class="bg-indigo-600 text-white px-5 py-2 rounded-full hover:bg-indigo-700 transition">Contact Us</a>
+                </div>
+
+                <button class="md:hidden text-2xl" id="mobile-menu-btn">
+                    <i class="fas fa-bars"></i>
                 </button>
             </div>
-            <div id="liveList" class="p-8 bg-black/40 border-t border-white/5 max-h-40 overflow-y-auto">
-                <!-- Manage list -->
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t p-4 space-y-4 shadow-lg">
+            <a href="#home" class="block font-semibold">Home</a>
+            <a href="#about" class="block font-semibold">About</a>
+            <a href="#curriculum" class="block font-semibold">Curriculum</a>
+            <a href="#admissions" class="block font-semibold">Admissions</a>
+            <a href="#contact" class="block font-semibold text-indigo-600">Contact Us</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-32 pb-20 px-4 hero-gradient overflow-hidden">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
+            <div class="flex-1 space-y-6 text-center md:text-left">
+                <span class="inline-block px-4 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm font-bold uppercase tracking-widest">Enrollment Open 2026</span>
+                <h1 class="text-5xl md:text-7xl font-bold text-indigo-950 leading-tight">
+                    Where Every <span class="text-indigo-600 underline decoration-yellow-400">Child</span> Belongs.
+                </h1>
+                <p class="text-lg text-slate-600 max-w-xl mx-auto md:mx-0">
+                    At Jackie & Topher Infant School, we nurture curiosity, encourage creativity, and build the foundation for a lifelong love of learning.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                    <button class="px-8 py-4 bg-indigo-600 text-white rounded-2xl font-bold text-lg hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition">Schedule a Visit</button>
+                    <button class="px-8 py-4 bg-white text-indigo-950 border-2 border-slate-200 rounded-2xl font-bold text-lg hover:border-indigo-600 transition">Our Programs</button>
+                </div>
+            </div>
+            <div class="flex-1 relative">
+                <div class="absolute -z-10 bg-yellow-300 w-full h-full blob-shape opacity-20 animate-pulse"></div>
+                <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&q=80&w=800" 
+                     alt="Happy children learning" 
+                     class="rounded-[3rem] shadow-2xl border-8 border-white object-cover aspect-square md:aspect-auto h-[500px] w-full"
+                     onerror="this.src='https://via.placeholder.com/800x600?text=Learning+is+Fun'">
             </div>
         </div>
-    </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <div class="p-8 rounded-3xl bg-blue-50 space-y-4 card-hover">
+                <div class="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto text-white text-2xl">
+                    <i class="fas fa-paint-brush"></i>
+                </div>
+                <h3 class="text-2xl font-bold">Creative Arts</h3>
+                <p class="text-slate-600">Unleashing imagination through messy play, painting, and music every day.</p>
+            </div>
+            <div class="p-8 rounded-3xl bg-green-50 space-y-4 card-hover">
+                <div class="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center mx-auto text-white text-2xl">
+                    <i class="fas fa-leaf"></i>
+                </div>
+                <h3 class="text-2xl font-bold">Nature Play</h3>
+                <p class="text-slate-600">Outdoor classrooms and discovery gardens for hands-on environmental exploration.</p>
+            </div>
+            <div class="p-8 rounded-3xl bg-purple-50 space-y-4 card-hover">
+                <div class="w-16 h-16 bg-purple-500 rounded-2xl flex items-center justify-center mx-auto text-white text-2xl">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <h3 class="text-2xl font-bold">Holistic Growth</h3>
+                <p class="text-slate-600">Focusing on social, emotional, and physical milestones in a safe environment.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 px-4">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row-reverse items-center gap-16">
+            <div class="flex-1 space-y-6">
+                <h2 class="text-4xl font-bold text-indigo-950">A Legacy of Care and Discovery</h2>
+                <p class="text-lg text-slate-600">
+                    Founded by Jackie and Topher, our school was born from a simple belief: infants and toddlers deserve more than just supervision; they deserve inspiration.
+                </p>
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4">
+                        <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                        <span class="font-semibold">Low Student-to-Teacher Ratios</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                        <span class="font-semibold">Organic Healthy Meal Plans</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <i class="fas fa-check-circle text-green-500 text-xl"></i>
+                        <span class="font-semibold">Certified Early Childhood Educators</span>
+                    </div>
+                </div>
+            </div>
+            <div class="flex-1">
+                <div class="grid grid-cols-2 gap-4">
+                    <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=400" class="rounded-3xl shadow-lg mt-8" alt="Yoga kids">
+                    <img src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&q=80&w=400" class="rounded-3xl shadow-lg" alt="Blocks">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Curriculum -->
+    <section id="curriculum" class="py-20 bg-indigo-950 text-white">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-12">
+            <div class="space-y-4">
+                <h2 class="text-4xl font-bold">Our Learning Path</h2>
+                <p class="text-indigo-200 max-w-2xl mx-auto">Tailored stages for every milestone in your child's first years.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="p-6 border border-white/10 rounded-3xl hover:bg-white/5 transition">
+                    <h4 class="text-xl font-bold text-yellow-400 mb-2">Infant Stars</h4>
+                    <p class="text-sm opacity-80">0-12 Months</p>
+                    <p class="mt-4 text-sm">Sensory play, tummy time, and secure attachment bonding.</p>
+                </div>
+                <div class="p-6 border border-white/10 rounded-3xl hover:bg-white/5 transition">
+                    <h4 class="text-xl font-bold text-pink-400 mb-2">Toddler Explorers</h4>
+                    <p class="text-sm opacity-80">1-2 Years</p>
+                    <p class="mt-4 text-sm">Language development, social interaction, and motor skills.</p>
+                </div>
+                <div class="p-6 border border-white/10 rounded-3xl hover:bg-white/5 transition">
+                    <h4 class="text-xl font-bold text-green-400 mb-2">Discovery Junior</h4>
+                    <p class="text-sm opacity-80">2-3 Years</p>
+                    <p class="mt-4 text-sm">Problem solving, arts & crafts, and early independence.</p>
+                </div>
+                <div class="p-6 border border-white/10 rounded-3xl hover:bg-white/5 transition">
+                    <h4 class="text-xl font-bold text-blue-400 mb-2">Preschool Prep</h4>
+                    <p class="text-sm opacity-80">3-4 Years</p>
+                    <p class="mt-4 text-sm">Early literacy, math concepts, and collaborative projects.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact / Inquiry Form -->
+    <section id="contact" class="py-20 px-4 bg-slate-50">
+        <div class="max-w-5xl mx-auto bg-white rounded-[3rem] shadow-xl overflow-hidden flex flex-col md:flex-row">
+            <div class="md:w-1/2 bg-indigo-600 p-12 text-white space-y-8">
+                <h2 class="text-3xl font-bold">Join Our Family</h2>
+                <p class="opacity-90">Ready to start the journey? Fill out the form and our admissions team will reach out within 24 hours.</p>
+                
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>123 Sunshine Lane, Playville City</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <i class="fas fa-phone"></i>
+                        <span>+1 (555) 987-6543</span>
+                    </div>
+                    <div class="flex items-center gap-4">
+                        <i class="fas fa-envelope"></i>
+                        <span>hello@jackie-topher.school</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="md:w-1/2 p-12">
+                <form id="inquiryForm" class="space-y-4">
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-1">Parent Name</label>
+                        <input type="text" required class="w-full px-4 py-3 rounded-xl border-2 border-slate-100 focus:border-indigo-600 outline-none transition" placeholder="Enter your name">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-1">Email Address</label>
+                        <input type="email" required class="w-full px-4 py-3 rounded-xl border-2 border-slate-100 focus:border-indigo-600 outline-none transition" placeholder="email@example.com">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-1">Child's Age Range</label>
+                        <select class="w-full px-4 py-3 rounded-xl border-2 border-slate-100 focus:border-indigo-600 outline-none transition">
+                            <option>Infant (0-1 yr)</option>
+                            <option>Toddler (1-2 yrs)</option>
+                            <option>Junior (2-3 yrs)</option>
+                            <option>Preschool (3+ yrs)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-bold text-slate-700 mb-1">Message (Optional)</label>
+                        <textarea rows="3" class="w-full px-4 py-3 rounded-xl border-2 border-slate-100 focus:border-indigo-600 outline-none transition" placeholder="Any specific questions?"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-100">Send Inquiry</button>
+                    <div id="successMessage" class="hidden p-4 bg-green-100 text-green-700 rounded-xl text-center text-sm font-bold">
+                        Message sent successfully! We'll be in touch soon.
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t py-12">
+        <div class="max-w-7xl mx-auto px-4 text-center space-y-6">
+            <div class="flex justify-center items-center gap-2">
+                <div class="bg-indigo-600 p-1 rounded-md">
+                    <i class="fas fa-child text-white"></i>
+                </div>
+                <span class="text-xl font-bold text-indigo-950">Jackie & Topher</span>
+            </div>
+            <div class="flex justify-center space-x-6 text-2xl text-slate-400">
+                <a href="#" class="hover:text-pink-600 transition"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="hover:text-blue-600 transition"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="hover:text-red-600 transition"><i class="fab fa-pinterest"></i></a>
+            </div>
+            <p class="text-slate-500 text-sm">© 2026 Jackie and Topher Infant School. Licensed Childcare Provider.</p>
+        </div>
+    </footer>
 
     <script>
-        // --- 1. Configuration & Initialization ---
-        const firebaseConfig = JSON.parse(typeof __firebase_config !== 'undefined' ? __firebase_config : '{}');
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'global-booster-v1';
-        
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
 
-        let currentTab = 'all';
-        let selectedPlatform = 'youtube';
-        let videos = [];
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
 
-        // --- 2. Smart Extraction Engine ---
-        function extractID(url, platform) {
-            try {
-                const u = url.trim();
-                if (platform === 'youtube') {
-                    if (u.includes('shorts/')) return u.split('shorts/')[1].split(/[?#&]/)[0];
-                    if (u.includes('v=')) return u.split('v=')[1].split(/[?#&]/)[0];
-                    if (u.includes('youtu.be/')) return u.split('youtu.be/')[1].split(/[?#&]/)[0];
-                } else if (platform === 'tiktok') {
-                    return u.split('/video/')[1]?.split(/[?#&]/)[0] || u.split('/').pop().split(/[?#&]/)[0];
-                } else if (platform === 'instagram') {
-                    return u.split('/reel/')[1]?.split('/')[0] || u.split('/p/')[1]?.split('/')[0];
-                } else if (platform === 'facebook') {
-                    return u.split('/reel/')[1]?.split(/[/?#&]/)[0];
-                }
-                return u;
-            } catch(e) { return url; }
-        }
+        // Form Submission Simulation
+        const form = document.getElementById('inquiryForm');
+        const successMsg = document.getElementById('successMessage');
 
-        function getEmbed(v) {
-            const id = v.videoId;
-            if (v.platform === 'youtube') return `https://www.youtube.com/embed/${id}?autoplay=1&mute=1&loop=1&playlist=${id}`;
-            if (v.platform === 'tiktok') return `https://www.tiktok.com/embed/v2/${id}`;
-            if (v.platform === 'instagram') return `https://www.instagram.com/reel/${id}/embed/`;
-            if (v.platform === 'facebook') return `https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/reel/${id}/&show_text=0&autoplay=true`;
-        }
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const btn = form.querySelector('button');
+            btn.innerHTML = '<i class="fas fa-spinner animate-spin"></i> Processing...';
+            btn.disabled = true;
 
-        // --- 3. Core Logic ---
-        async function unlockApp() {
-            try {
-                await auth.signInAnonymously();
-                document.getElementById('entryOverlay').style.display = 'none';
-                startListener();
-            } catch (e) { alert("Error connecting to hub."); }
-        }
+            // Simulate network delay
+            setTimeout(() => {
+                form.reset();
+                btn.classList.add('hidden');
+                successMsg.classList.remove('hidden');
+            }, 1500);
+        });
 
-        function startListener() {
-            // Path: /artifacts/{appId}/public/data/videos
-            db.collection('artifacts').doc(appId).collection('public').doc('data').collection('videos')
-              .onSnapshot(snap => {
-                  videos = snap.docs.map(doc => ({id: doc.id, ...doc.data()}));
-                  render();
-              });
-        }
-
-        function render() {
-            const grid = document.getElementById('videoGrid');
-            const filtered = currentTab === 'all' ? videos : videos.filter(v => v.platform === currentTab);
-            
-            grid.innerHTML = filtered.map(v => `
-                <div class="boost-card p-4 space-y-4">
-                    <div class="video-aspect">
-                        <iframe src="${getEmbed(v)}" class="w-full h-full border-0" allow="autoplay; encrypted-media"></iframe>
-                    </div>
-                    <div class="px-2">
-                        <div class="flex justify-between items-center mb-4">
-                            <span class="font-bold text-sm truncate w-2/3">${v.creator}</span>
-                            <span class="text-[10px] bg-blue-600 px-2 py-0.5 rounded font-bold uppercase">${v.platform.slice(0,2)}</span>
-                        </div>
-                        <div class="grid grid-cols-3 gap-2">
-                            <button onclick="handleBoost('${v.id}', 'likes', '${v.originalUrl}')" class="flex flex-col items-center py-2 bg-white/5 rounded-xl hover:bg-red-500/10 transition-all">
-                                <span class="text-xs">❤️</span>
-                                <span class="text-[9px] font-bold mt-1">${v.likes || 0}</span>
-                            </button>
-                            <button onclick="handleBoost('${v.id}', 'follows', '${v.originalUrl}')" class="flex flex-col items-center py-2 bg-white/5 rounded-xl hover:bg-blue-500/10 transition-all">
-                                <span class="text-xs">➕</span>
-                                <span class="text-[9px] font-bold mt-1">${v.follows || 0}</span>
-                            </button>
-                            <button onclick="handleBoost('${v.id}', 'views', '')" class="flex flex-col items-center py-2 bg-white/5 rounded-xl hover:bg-yellow-500/10 transition-all">
-                                <span class="text-xs">⚡</span>
-                                <span class="text-[9px] font-bold mt-1">${v.views || 0}</span>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-
-            const list = document.getElementById('liveList');
-            list.innerHTML = videos.map(v => `
-                <div class="flex justify-between items-center text-xs p-2 border-b border-white/5">
-                    <span>${v.creator}</span>
-                    <button onclick="deleteVideo('${v.id}')" class="text-red-500">Delete</button>
-                </div>
-            `).join('');
-        }
-
-        async function handleBoost(id, type, url) {
-            const ref = db.collection('artifacts').doc(appId).collection('public').doc('data').collection('videos').doc(id);
-            await ref.update({ [type]: firebase.firestore.FieldValue.increment(1), views: firebase.firestore.FieldValue.increment(1) });
-            if(url) window.open(url, '_blank');
-        }
-
-        async function addVideo() {
-            const url = document.getElementById('urlInput').value;
-            const creator = document.getElementById('creatorInput').value;
-            if(!url || !creator) return;
-
-            const videoId = extractID(url, selectedPlatform);
-            await db.collection('artifacts').doc(appId).collection('public').doc('data').collection('videos').add({
-                platform: selectedPlatform,
-                creator: creator,
-                videoId: videoId,
-                originalUrl: url,
-                likes: 0,
-                follows: 0,
-                views: 0,
-                createdAt: Date.now()
-            });
-
-            document.getElementById('urlInput').value = '';
-            document.getElementById('creatorInput').value = '';
-        }
-
-        async function deleteVideo(id) {
-            await db.collection('artifacts').doc(appId).collection('public').doc('data').collection('videos').doc(id).delete();
-        }
-
-        // --- UI State ---
-        function filter(f) {
-            currentTab = f;
-            document.querySelectorAll('.tab-btn').forEach(b => {
-                b.classList.remove('bg-blue-600', 'text-white');
-                b.classList.add('text-slate-500');
-            });
-            event.target.classList.add('bg-blue-600', 'text-white');
-            render();
-        }
-
-        function setPlatform(p) {
-            selectedPlatform = p;
-            document.querySelectorAll('.plt-btn').forEach(b => b.classList.remove('active', 'bg-blue-600'));
-            event.target.classList.add('active', 'bg-blue-600');
-        }
-
-        function openAdmin() { document.getElementById('adminPanel').classList.remove('hidden'); }
-        function closeAdmin() { document.getElementById('adminPanel').classList.add('hidden'); }
-
+        // Sticky Nav opacity
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-white', 'shadow-md');
+                nav.classList.remove('bg-white/80');
+            } else {
+                nav.classList.remove('shadow-md');
+                nav.classList.add('bg-white/80');
+            }
+        });
     </script>
 </body>
 </html>
