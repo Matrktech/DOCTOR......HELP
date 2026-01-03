@@ -3,204 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jackie and Topher Infant School | Nurturing Bright Futures</title>
+    <title>Jackie and Topher Nursery & Primary School | Quality Ugandan Education</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://static.elfsight.com/platform/platform.js" async defer></script>
     <style>
-        body {
-            font-family: 'Nunito', sans-serif;
-        }
-        h1, h2, h3, .brand-font {
-            font-family: 'Quicksand', sans-serif;
-        }
-        .hero-gradient {
-            background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
-        }
-        .blob-shape {
-            border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%;
-        }
-        .card-hover {
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        .card-hover:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        scroll-behavior: smooth;
+        body { font-family: 'Nunito', sans-serif; scroll-behavior: smooth; }
+        h1, h2, h3, .brand-font { font-family: 'Quicksand', sans-serif; }
+        .hero-gradient { background: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%); }
+        .blob-shape { border-radius: 42% 58% 70% 30% / 45% 45% 55% 55%; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .curriculum-card { border-top: 4px solid; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
 
     <!-- Navigation -->
-    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md shadow-sm">
+    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md shadow-sm transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-20 items-center">
                 <div class="flex items-center gap-2">
-                    <div class="bg-yellow-400 p-2 rounded-lg">
-                        <i class="fas fa-child text-2xl text-white"></i>
+                    <div class="bg-indigo-600 p-2 rounded-lg">
+                        <i class="fas fa-graduation-cap text-2xl text-white"></i>
                     </div>
-                    <span class="text-2xl font-bold text-indigo-900 tracking-tight">Jackie & Topher</span>
+                    <div class="flex flex-col">
+                        <span class="text-xl font-bold text-indigo-900 leading-none">Jackie & Topher</span>
+                        <span class="text-[10px] uppercase tracking-widest text-slate-500 font-bold">Nursery & Primary School</span>
+                    </div>
                 </div>
                 
-                <div class="hidden md:flex space-x-8 font-semibold text-slate-600">
-                    <a href="#home" class="hover:text-yellow-500 transition">Home</a>
-                    <a href="#about" class="hover:text-yellow-500 transition">About</a>
-                    <a href="#curriculum" class="hover:text-yellow-500 transition">Curriculum</a>
-                    <a href="#admissions" class="hover:text-yellow-500 transition">Admissions</a>
+                <div class="hidden lg:flex space-x-6 font-semibold text-slate-600 items-center">
+                    <a href="#home" class="hover:text-indigo-600 transition">Home</a>
+                    <a href="#about" class="hover:text-indigo-600 transition">About</a>
+                    <a href="#curriculum" class="hover:text-indigo-600 transition">Curriculum</a>
+                    <a href="#gallery" class="hover:text-indigo-600 transition">Gallery</a>
+                    <a href="#admissions" class="hover:text-indigo-600 transition">Admissions</a>
                     <a href="#contact" class="bg-indigo-600 text-white px-5 py-2 rounded-full hover:bg-indigo-700 transition">Contact Us</a>
                 </div>
 
-                <button class="md:hidden text-2xl" id="mobile-menu-btn">
+                <button class="lg:hidden text-2xl" id="mobile-menu-btn">
                     <i class="fas fa-bars"></i>
                 </button>
             </div>
         </div>
         <!-- Mobile Menu -->
-        <div id="mobile-menu" class="hidden md:hidden bg-white border-t p-4 space-y-4 shadow-lg">
-            <a href="#home" class="block font-semibold">Home</a>
-            <a href="#about" class="block font-semibold">About</a>
-            <a href="#curriculum" class="block font-semibold">Curriculum</a>
-            <a href="#admissions" class="block font-semibold">Admissions</a>
-            <a href="#contact" class="block font-semibold text-indigo-600">Contact Us</a>
+        <div id="mobile-menu" class="hidden lg:hidden bg-white border-t p-4 space-y-4 shadow-xl">
+            <a href="#home" class="block font-semibold p-2">Home</a>
+            <a href="#about" class="block font-semibold p-2">About</a>
+            <a href="#curriculum" class="block font-semibold p-2">Curriculum</a>
+            <a href="#gallery" class="block font-semibold p-2">Gallery</a>
+            <a href="#contact" class="block font-semibold text-indigo-600 p-2">Contact Us</a>
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero -->
     <section id="home" class="pt-32 pb-20 px-4 hero-gradient overflow-hidden">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
             <div class="flex-1 space-y-6 text-center md:text-left">
-                <span class="inline-block px-4 py-1 bg-yellow-100 text-yellow-700 rounded-full text-sm font-bold uppercase tracking-widest">Enrollment Open 2026</span>
-                <h1 class="text-5xl md:text-7xl font-bold text-indigo-950 leading-tight">
-                    Where Every <span class="text-indigo-600 underline decoration-yellow-400">Child</span> Belongs.
+                <span class="inline-block px-4 py-1 bg-yellow-400 text-indigo-950 rounded-full text-xs font-black uppercase tracking-widest">Nurturing Ugandan Excellence</span>
+                <h1 class="text-4xl md:text-6xl font-bold text-indigo-950 leading-tight">
+                    Quality Education for a <span class="text-indigo-600">Brighter</span> Tomorrow.
                 </h1>
                 <p class="text-lg text-slate-600 max-w-xl mx-auto md:mx-0">
-                    At Jackie & Topher Infant School, we nurture curiosity, encourage creativity, and build the foundation for a lifelong love of learning.
+                    Following the NCDC curriculum, we provide a holistic environment for children from Baby Class to Primary Seven.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                    <button class="px-8 py-4 bg-indigo-600 text-white rounded-2xl font-bold text-lg hover:bg-indigo-700 shadow-lg shadow-indigo-200 transition">Schedule a Visit</button>
-                    <button class="px-8 py-4 bg-white text-indigo-950 border-2 border-slate-200 rounded-2xl font-bold text-lg hover:border-indigo-600 transition">Our Programs</button>
+                    <a href="#contact" class="px-8 py-4 bg-indigo-600 text-white rounded-2xl font-bold text-center hover:bg-indigo-700 shadow-lg transition">Apply for 2026</a>
+                    <a href="#curriculum" class="px-8 py-4 bg-white text-indigo-950 border-2 border-slate-200 rounded-2xl font-bold text-center hover:border-indigo-600 transition">View Classes</a>
                 </div>
             </div>
             <div class="flex-1 relative">
-                <div class="absolute -z-10 bg-yellow-300 w-full h-full blob-shape opacity-20 animate-pulse"></div>
-                <img src="https://images.unsplash.com/photo-1503454537195-1dcabb73ffb9?auto=format&fit=crop&q=80&w=800" 
-                     alt="Happy children learning" 
-                     class="rounded-[3rem] shadow-2xl border-8 border-white object-cover aspect-square md:aspect-auto h-[500px] w-full"
-                     onerror="this.src='https://via.placeholder.com/800x600?text=Learning+is+Fun'">
+                <div class="absolute -z-10 bg-indigo-200 w-full h-full blob-shape opacity-30 animate-pulse"></div>
+                <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=800" 
+                     alt="Ugandan students learning" 
+                     class="rounded-[3rem] shadow-2xl border-8 border-white object-cover w-full h-[450px]">
             </div>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div class="p-8 rounded-3xl bg-blue-50 space-y-4 card-hover">
-                <div class="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto text-white text-2xl">
-                    <i class="fas fa-paint-brush"></i>
-                </div>
-                <h3 class="text-2xl font-bold">Creative Arts</h3>
-                <p class="text-slate-600">Unleashing imagination through messy play, painting, and music every day.</p>
+    <!-- Curriculum Section (Ugandan System) -->
+    <section id="curriculum" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16 space-y-4">
+                <h2 class="text-4xl font-bold text-indigo-950">Our Academic Levels</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">We follow the Ugandan National Curriculum, focusing on academic excellence, talent development, and character building.</p>
             </div>
-            <div class="p-8 rounded-3xl bg-green-50 space-y-4 card-hover">
-                <div class="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center mx-auto text-white text-2xl">
-                    <i class="fas fa-leaf"></i>
-                </div>
-                <h3 class="text-2xl font-bold">Nature Play</h3>
-                <p class="text-slate-600">Outdoor classrooms and discovery gardens for hands-on environmental exploration.</p>
-            </div>
-            <div class="p-8 rounded-3xl bg-purple-50 space-y-4 card-hover">
-                <div class="w-16 h-16 bg-purple-500 rounded-2xl flex items-center justify-center mx-auto text-white text-2xl">
-                    <i class="fas fa-brain"></i>
-                </div>
-                <h3 class="text-2xl font-bold">Holistic Growth</h3>
-                <p class="text-slate-600">Focusing on social, emotional, and physical milestones in a safe environment.</p>
-            </div>
-        </div>
-    </section>
 
-    <!-- About Section -->
-    <section id="about" class="py-20 px-4">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row-reverse items-center gap-16">
-            <div class="flex-1 space-y-6">
-                <h2 class="text-4xl font-bold text-indigo-950">A Legacy of Care and Discovery</h2>
-                <p class="text-lg text-slate-600">
-                    Founded by Jackie and Topher, our school was born from a simple belief: infants and toddlers deserve more than just supervision; they deserve inspiration.
-                </p>
-                <div class="space-y-4">
-                    <div class="flex items-center gap-4">
-                        <i class="fas fa-check-circle text-green-500 text-xl"></i>
-                        <span class="font-semibold">Low Student-to-Teacher Ratios</span>
+            <!-- Nursery Section -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold text-indigo-600 mb-6 flex items-center gap-2">
+                    <i class="fas fa-seedling"></i> Nursery Section (Pre-Primary)
+                </h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="p-6 bg-blue-50 rounded-2xl curriculum-card border-blue-400 card-hover">
+                        <h4 class="text-xl font-bold mb-2">Baby Class</h4>
+                        <p class="text-sm text-slate-600">Ages 3-4. Introduction to socialization, basic sounds, and motor skills through play.</p>
                     </div>
-                    <div class="flex items-center gap-4">
-                        <i class="fas fa-check-circle text-green-500 text-xl"></i>
-                        <span class="font-semibold">Organic Healthy Meal Plans</span>
+                    <div class="p-6 bg-pink-50 rounded-2xl curriculum-card border-pink-400 card-hover">
+                        <h4 class="text-xl font-bold mb-2">Middle Class</h4>
+                        <p class="text-sm text-slate-600">Ages 4-5. Developing language proficiency, number recognition, and creative arts.</p>
                     </div>
-                    <div class="flex items-center gap-4">
-                        <i class="fas fa-check-circle text-green-500 text-xl"></i>
-                        <span class="font-semibold">Certified Early Childhood Educators</span>
+                    <div class="p-6 bg-green-50 rounded-2xl curriculum-card border-green-400 card-hover">
+                        <h4 class="text-xl font-bold mb-2">Top Class</h4>
+                        <p class="text-sm text-slate-600">Ages 5-6. Preparing for Primary transition with reading, writing, and arithmetic basics.</p>
                     </div>
                 </div>
             </div>
-            <div class="flex-1">
-                <div class="grid grid-cols-2 gap-4">
-                    <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&q=80&w=400" class="rounded-3xl shadow-lg mt-8" alt="Yoga kids">
-                    <img src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&q=80&w=400" class="rounded-3xl shadow-lg" alt="Blocks">
+
+            <!-- Primary Section -->
+            <div>
+                <h3 class="text-2xl font-bold text-indigo-600 mb-6 flex items-center gap-2">
+                    <i class="fas fa-book-reader"></i> Primary Section (P.1 - P.7)
+                </h3>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <div class="p-5 border border-slate-100 rounded-xl bg-white shadow-sm hover:border-indigo-200 transition">
+                        <span class="text-indigo-600 font-bold">Lower Primary</span>
+                        <h5 class="font-bold text-lg">P.1 - P.3</h5>
+                        <p class="text-xs text-slate-500 mt-2">Thematic curriculum focusing on literacy and numeracy foundations.</p>
+                    </div>
+                    <div class="p-5 border border-slate-100 rounded-xl bg-white shadow-sm hover:border-indigo-200 transition">
+                        <span class="text-indigo-600 font-bold">Transition Stage</span>
+                        <h5 class="font-bold text-lg">P.4</h5>
+                        <p class="text-xs text-slate-500 mt-2">Transitioning from local language to English as the medium of instruction.</p>
+                    </div>
+                    <div class="p-5 border border-slate-100 rounded-xl bg-white shadow-sm hover:border-indigo-200 transition">
+                        <span class="text-indigo-600 font-bold">Upper Primary</span>
+                        <h5 class="font-bold text-lg">P.5 - P.6</h5>
+                        <p class="text-xs text-slate-500 mt-2">In-depth study of SST, Science, Math, and English Language.</p>
+                    </div>
+                    <div class="p-5 border border-indigo-200 rounded-xl bg-indigo-50 shadow-sm">
+                        <span class="text-indigo-600 font-bold">Candidate Class</span>
+                        <h5 class="font-bold text-lg">P.7 (PLE)</h5>
+                        <p class="text-xs text-slate-500 mt-2">Intensive preparation for Primary Leaving Examinations (PLE).</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Curriculum -->
-    <section id="curriculum" class="py-20 bg-indigo-950 text-white">
-        <div class="max-w-7xl mx-auto px-4 text-center space-y-12">
-            <div class="space-y-4">
-                <h2 class="text-4xl font-bold">Our Learning Path</h2>
-                <p class="text-indigo-200 max-w-2xl mx-auto">Tailored stages for every milestone in your child's first years.</p>
+    <!-- Gallery Section -->
+    <section id="gallery" class="py-20 bg-slate-100">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16 space-y-4">
+                <h2 class="text-4xl font-bold text-indigo-950">Life at Jackie & Topher</h2>
+                <p class="text-slate-600">See our students in action through our photo and video feeds.</p>
             </div>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
-                <div class="p-6 border border-white/10 rounded-3xl hover:bg-white/5 transition">
-                    <h4 class="text-xl font-bold text-yellow-400 mb-2">Infant Stars</h4>
-                    <p class="text-sm opacity-80">0-12 Months</p>
-                    <p class="mt-4 text-sm">Sensory play, tummy time, and secure attachment bonding.</p>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Image Gallery (Pinterest Feed) -->
+                <div class="space-y-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i class="fab fa-pinterest text-red-600 text-3xl"></i>
+                        <h3 class="text-2xl font-bold">Photo Highlights</h3>
+                    </div>
+                    <div class="bg-white p-4 rounded-3xl shadow-lg min-h-[500px]">
+                        <!-- Elfsight Pinterest Feed Widget -->
+                        <!-- Note: You will need to replace the ID with your actual widget ID from elfsight.com -->
+                        <div class="elfsight-app-5825391d-555e-4e94-8742-997539076597" data-elfsight-app-lazy></div>
+                        <!-- Fallback message if widget ID is not set -->
+                        <div class="flex flex-col items-center justify-center h-full text-slate-400 p-8 text-center space-y-4">
+                             <i class="fas fa-images text-6xl opacity-20"></i>
+                             <p>Connect your Pinterest account to display live photo feed here.</p>
+                        </div>
+                    </div>
                 </div>
-                <div class="p-6 border border-white/10 rounded-3xl hover:bg-white/5 transition">
-                    <h4 class="text-xl font-bold text-pink-400 mb-2">Toddler Explorers</h4>
-                    <p class="text-sm opacity-80">1-2 Years</p>
-                    <p class="mt-4 text-sm">Language development, social interaction, and motor skills.</p>
-                </div>
-                <div class="p-6 border border-white/10 rounded-3xl hover:bg-white/5 transition">
-                    <h4 class="text-xl font-bold text-green-400 mb-2">Discovery Junior</h4>
-                    <p class="text-sm opacity-80">2-3 Years</p>
-                    <p class="mt-4 text-sm">Problem solving, arts & crafts, and early independence.</p>
-                </div>
-                <div class="p-6 border border-white/10 rounded-3xl hover:bg-white/5 transition">
-                    <h4 class="text-xl font-bold text-blue-400 mb-2">Preschool Prep</h4>
-                    <p class="text-sm opacity-80">3-4 Years</p>
-                    <p class="mt-4 text-sm">Early literacy, math concepts, and collaborative projects.</p>
+
+                <!-- Video Gallery -->
+                <div class="space-y-6">
+                    <div class="flex items-center gap-3 mb-4">
+                        <i class="fab fa-youtube text-red-600 text-3xl"></i>
+                        <h3 class="text-2xl font-bold">Video Discovery</h3>
+                    </div>
+                    <div class="space-y-4">
+                        <!-- Featured Video -->
+                        <div class="aspect-video w-full rounded-3xl overflow-hidden shadow-xl bg-black relative group">
+                            <div class="absolute inset-0 flex items-center justify-center z-10">
+                                <button class="w-20 h-20 bg-white/20 backdrop-blur-md rounded-full flex items-center justify-center text-white text-3xl hover:scale-110 transition">
+                                    <i class="fas fa-play ml-1"></i>
+                                </button>
+                            </div>
+                            <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-60" alt="Video cover">
+                        </div>
+                        <!-- Video List -->
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="aspect-video bg-slate-200 rounded-xl overflow-hidden cursor-pointer hover:opacity-80 transition">
+                                <img src="https://images.unsplash.com/photo-1516627145497-ae6968895b74?auto=format&fit=crop&q=80&w=400" class="w-full h-full object-cover" alt="Thumb">
+                            </div>
+                            <div class="aspect-video bg-slate-200 rounded-xl overflow-hidden cursor-pointer hover:opacity-80 transition">
+                                <img src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&q=80&w=400" class="w-full h-full object-cover" alt="Thumb">
+                            </div>
+                        </div>
+                        <p class="text-center text-sm text-slate-500 italic">Follow us on social media for daily video updates of school activities!</p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Contact / Inquiry Form -->
-    <section id="contact" class="py-20 px-4 bg-slate-50">
-        <div class="max-w-5xl mx-auto bg-white rounded-[3rem] shadow-xl overflow-hidden flex flex-col md:flex-row">
+    <!-- Contact / Inquiry -->
+    <section id="contact" class="py-20 px-4">
+        <div class="max-w-5xl mx-auto bg-white rounded-[3rem] shadow-2xl overflow-hidden flex flex-col md:flex-row">
             <div class="md:w-1/2 bg-indigo-600 p-12 text-white space-y-8">
-                <h2 class="text-3xl font-bold">Join Our Family</h2>
-                <p class="opacity-90">Ready to start the journey? Fill out the form and our admissions team will reach out within 24 hours.</p>
+                <h2 class="text-3xl font-bold">Start the Journey</h2>
+                <p class="opacity-90">Enroll your child today at Jackie and Topher. We are currently accepting applications for the upcoming term.</p>
                 
                 <div class="space-y-6">
                     <div class="flex items-center gap-4">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <span>Nansana Gganda Nasere</span>
+                        <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center"><i class="fas fa-map-marker-alt"></i></div>
+                        <span>Nansana Gganda Nasere, Uganda</span>
                     </div>
                     <div class="flex items-center gap-4">
-                        <i class="fas fa-phone"></i>
-                        <span>+1 (+265)708825240 / 0774038899 / 0753018290 /0702018290</span>
+                        <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center"><i class="fas fa-phone"></i></div>
+                        <div class="flex flex-col">
+                            <span>+256 708 825 240</span>
+                            <span class="text-sm opacity-70">0774 038 899 / 0753 018 290</span>
+                        </div>
                     </div>
                     <div class="flex items-center gap-4">
-                        <i class="fas fa-envelope"></i>
+                        <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center"><i class="fas fa-envelope"></i></div>
                         <span>JackieandTopherps@gmail.com</span>
                     </div>
                 </div>
@@ -209,29 +231,34 @@
             <div class="md:w-1/2 p-12">
                 <form id="inquiryForm" class="space-y-4">
                     <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-1">Parent Name</label>
-                        <input type="text" required class="w-full px-4 py-3 rounded-xl border-2 border-slate-100 focus:border-indigo-600 outline-none transition" placeholder="Enter your name">
+                        <label class="block text-sm font-bold text-slate-700 mb-1">Parent/Guardian Name</label>
+                        <input type="text" required class="w-full px-4 py-3 rounded-xl border-2 border-slate-100 focus:border-indigo-600 outline-none transition" placeholder="Your Full Name">
                     </div>
                     <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-1">Email Address</label>
-                        <input type="email" required class="w-full px-4 py-3 rounded-xl border-2 border-slate-100 focus:border-indigo-600 outline-none transition" placeholder="email@example.com">
+                        <label class="block text-sm font-bold text-slate-700 mb-1">Phone Number</label>
+                        <input type="tel" required class="w-full px-4 py-3 rounded-xl border-2 border-slate-100 focus:border-indigo-600 outline-none transition" placeholder="07xx xxx xxx">
                     </div>
-                    <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-1">Child's Age Range</label>
-                        <select class="w-full px-4 py-3 rounded-xl border-2 border-slate-100 focus:border-indigo-600 outline-none transition">
-                            <option>Infant (0-1 yr)</option>
-                            <option>Toddler (1-2 yrs)</option>
-                            <option>Junior (2-3 yrs)</option>
-                            <option>Preschool (3+ yrs)</option>
-                        </select>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1">Target Class</label>
+                            <select class="w-full px-4 py-3 rounded-xl border-2 border-slate-100 focus:border-indigo-600 outline-none transition">
+                                <option>Nursery (Baby-Top)</option>
+                                <option>Lower Primary (P1-P3)</option>
+                                <option>Upper Primary (P4-P7)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-1">Entry Year</label>
+                            <select class="w-full px-4 py-3 rounded-xl border-2 border-slate-100 focus:border-indigo-600 outline-none transition">
+                                <option>Term 1 - 2026</option>
+                                <option>Term 2 - 2026</option>
+                                <option>Term 3 - 2026</option>
+                            </select>
+                        </div>
                     </div>
-                    <div>
-                        <label class="block text-sm font-bold text-slate-700 mb-1">Message (Optional)</label>
-                        <textarea rows="3" class="w-full px-4 py-3 rounded-xl border-2 border-slate-100 focus:border-indigo-600 outline-none transition" placeholder="Any specific questions?"></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-100">Send Inquiry</button>
+                    <button type="submit" class="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg">Submit Application Interest</button>
                     <div id="successMessage" class="hidden p-4 bg-green-100 text-green-700 rounded-xl text-center text-sm font-bold">
-                        Message sent successfully! We'll be in touch soon.
+                        Thank you! We have received your inquiry. We will call you shortly.
                     </div>
                 </form>
             </div>
@@ -240,58 +267,70 @@
 
     <!-- Footer -->
     <footer class="bg-white border-t py-12">
-        <div class="max-w-7xl mx-auto px-4 text-center space-y-6">
-            <div class="flex justify-center items-center gap-2">
-                <div class="bg-indigo-600 p-1 rounded-md">
-                    <i class="fas fa-child text-white"></i>
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+            <div class="space-y-4">
+                <div class="flex items-center gap-2">
+                    <div class="bg-indigo-600 p-1 rounded-md">
+                        <i class="fas fa-graduation-cap text-white text-sm"></i>
+                    </div>
+                    <span class="text-xl font-bold text-indigo-950">Jackie & Topher</span>
                 </div>
-                <span class="text-xl font-bold text-indigo-950">Jackie & Topher</span>
+                <p class="text-slate-500 text-sm">Providing excellence in education through the Ugandan National Curriculum since inception. Committed to molding tomorrow's leaders.</p>
             </div>
-            <div class="flex justify-center space-x-6 text-2xl text-slate-400">
-                <a href="#" class="hover:text-pink-600 transition"><i class="fab fa-instagram"></i></a>
-                <a href="#" class="hover:text-blue-600 transition"><i class="fab fa-facebook"></i></a>
-                <a href="#" class="hover:text-red-600 transition"><i class="fab fa-pinterest"></i></a>
+            <div>
+                <h4 class="font-bold mb-4">Quick Links</h4>
+                <ul class="text-slate-500 text-sm space-y-2">
+                    <li><a href="#about" class="hover:text-indigo-600">Our History</a></li>
+                    <li><a href="#curriculum" class="hover:text-indigo-600">Academic Structure</a></li>
+                    <li><a href="#gallery" class="hover:text-indigo-600">School Gallery</a></li>
+                    <li><a href="#" class="hover:text-indigo-600">School Calendar</a></li>
+                </ul>
             </div>
-            <p class="text-slate-500 text-sm">© 2026 Jackie and Topher Infant School. Licensed Childcare Provider.</p>
+            <div>
+                <h4 class="font-bold mb-4">Location</h4>
+                <p class="text-slate-500 text-sm">Nansana Gganda Nasere</p>
+                <p class="text-slate-500 text-sm">Wakiso District, Uganda</p>
+                <div class="flex space-x-4 mt-4">
+                    <a href="#" class="w-10 h-10 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 hover:bg-indigo-600 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#" class="w-10 h-10 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 hover:bg-indigo-600 hover:text-white transition"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+        </div>
+        <div class="text-center pt-8 border-t border-slate-100">
+            <p class="text-slate-400 text-xs">© 2026 Jackie and Topher Nursery & Primary School. All Rights Reserved.</p>
         </div>
     </footer>
 
     <script>
-        // Mobile Menu Toggle
+        // Mobile Menu
         const menuBtn = document.getElementById('mobile-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
+        menuBtn.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
 
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-        });
-
-        // Form Submission Simulation
+        // Form Submit
         const form = document.getElementById('inquiryForm');
         const successMsg = document.getElementById('successMessage');
-
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             const btn = form.querySelector('button');
-            btn.innerHTML = '<i class="fas fa-spinner animate-spin"></i> Processing...';
+            btn.innerHTML = '<i class="fas fa-circle-notch animate-spin"></i> Sending...';
             btn.disabled = true;
-
-            // Simulate network delay
             setTimeout(() => {
                 form.reset();
                 btn.classList.add('hidden');
                 successMsg.classList.remove('hidden');
-            }, 1500);
+            }, 2000);
         });
 
-        // Sticky Nav opacity
+        // Scroll Reveal Header
         window.addEventListener('scroll', () => {
             const nav = document.querySelector('nav');
             if (window.scrollY > 50) {
-                nav.classList.add('bg-white', 'shadow-md');
-                nav.classList.remove('bg-white/80');
+                nav.classList.add('shadow-lg', 'h-16');
+                nav.classList.remove('h-20');
             } else {
-                nav.classList.remove('shadow-md');
-                nav.classList.add('bg-white/80');
+                nav.classList.remove('shadow-lg', 'h-16');
+                nav.classList.add('h-20');
             }
         });
     </script>
