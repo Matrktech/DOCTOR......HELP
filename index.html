@@ -17,9 +17,34 @@
         .card-hover { transition: all 0.3s ease; }
         .card-hover:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
         .curriculum-card { border-top: 4px solid; }
+        
+        /* WhatsApp Floating Button Animation */
+        .whatsapp-float {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 100;
+            transition: all 0.3s ease;
+        }
+        .whatsapp-float:hover {
+            transform: scale(1.1);
+        }
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(34, 197, 94, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(34, 197, 94, 0); }
+        }
+        .pulse-wa {
+            animation: pulse-green 2s infinite;
+        }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800">
+
+    <!-- WhatsApp Floating Button -->
+    <a href="https://wa.me/256708825240" target="_blank" class="whatsapp-float bg-green-500 text-white w-14 h-14 rounded-full flex items-center justify-center shadow-2xl pulse-wa">
+        <i class="fab fa-whatsapp text-3xl"></i>
+    </a>
 
     <!-- Navigation -->
     <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md shadow-sm transition-all duration-300">
@@ -71,7 +96,9 @@
                     Following the NCDC curriculum, we provide a holistic environment for children from Baby Class to Primary Seven.
                 </p>
                 <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-                    <a href="#contact" class="px-8 py-4 bg-indigo-600 text-white rounded-2xl font-bold text-center hover:bg-indigo-700 shadow-lg transition">Apply for 2026</a>
+                    <a href="https://wa.me/256708825240" target="_blank" class="px-8 py-4 bg-green-600 text-white rounded-2xl font-bold text-center hover:bg-green-700 shadow-lg transition flex items-center justify-center gap-2">
+                        <i class="fab fa-whatsapp"></i> Chat with Admissions
+                    </a>
                     <a href="#curriculum" class="px-8 py-4 bg-white text-indigo-950 border-2 border-slate-200 rounded-2xl font-bold text-center hover:border-indigo-600 transition">View Classes</a>
                 </div>
             </div>
@@ -153,15 +180,20 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <!-- Image Gallery (Your Specific Pinterest Feed) -->
+                <!-- Pinterest Gallery -->
                 <div class="space-y-6">
                     <div class="flex items-center gap-3 mb-4">
                         <i class="fab fa-pinterest text-red-600 text-3xl"></i>
                         <h3 class="text-2xl font-bold">Photo Highlights</h3>
                     </div>
                     <div class="bg-white p-4 rounded-3xl shadow-lg min-h-[500px]">
-                        <!-- Your Elfsight Pinterest Feed Widget -->
-                        <div class="elfsight-app-0dc7c6fd-a4fb-443a-91bc-425256dc4e76" data-elfsight-app-lazy></div>
+                        <!-- Primary Elfsight App -->
+                        <div class="elfsight-app-760c7c19-519e-4bea-9e80-15c18227936e" data-elfsight-app-lazy></div>
+                        
+                        <!-- Secondary Elfsight App (Original Pinterest) -->
+                        <div class="mt-8 pt-8 border-t border-slate-100">
+                            <div class="elfsight-app-0dc7c6fd-a4fb-443a-91bc-425256dc4e76" data-elfsight-app-lazy></div>
+                        </div>
                     </div>
                 </div>
 
@@ -209,11 +241,18 @@
                         <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center"><i class="fas fa-map-marker-alt"></i></div>
                         <span>Nansana Gganda Nasere, Uganda</span>
                     </div>
+                    <a href="https://wa.me/256708825240" target="_blank" class="flex items-center gap-4 hover:bg-white/10 p-2 rounded-xl transition">
+                        <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center"><i class="fab fa-whatsapp"></i></div>
+                        <div class="flex flex-col">
+                            <span class="font-bold">+256 708 825 240</span>
+                            <span class="text-xs opacity-70">Direct WhatsApp Admissions</span>
+                        </div>
+                    </a>
                     <div class="flex items-center gap-4">
                         <div class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center"><i class="fas fa-phone"></i></div>
-                        <div class="flex flex-col">
-                            <span>+256 708 825 240</span>
-                            <span class="text-sm opacity-70">0774 038 899 / 0753 018 290</span>
+                        <div class="flex flex-col text-sm">
+                            <span>0774 038 899</span>
+                            <span>0753 018 290</span>
                         </div>
                     </div>
                     <div class="flex items-center gap-4">
@@ -287,7 +326,7 @@
                 <p class="text-slate-500 text-sm">Wakiso District, Uganda</p>
                 <div class="flex space-x-4 mt-4">
                     <a href="#" class="w-10 h-10 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 hover:bg-indigo-600 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
-                    <a href="#" class="w-10 h-10 bg-indigo-50 rounded-full flex items-center justify-center text-indigo-600 hover:bg-indigo-600 hover:text-white transition"><i class="fab fa-whatsapp"></i></a>
+                    <a href="https://wa.me/256708825240" target="_blank" class="w-10 h-10 bg-green-50 rounded-full flex items-center justify-center text-green-600 hover:bg-green-600 hover:text-white transition"><i class="fab fa-whatsapp"></i></a>
                 </div>
             </div>
         </div>
