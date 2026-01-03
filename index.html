@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Elfsight Platform Script -->
     <script src="https://static.elfsight.com/platform/platform.js" async defer></script>
     <style>
         body { font-family: 'Nunito', sans-serif; scroll-behavior: smooth; }
@@ -152,21 +153,15 @@
             </div>
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <!-- Image Gallery (Pinterest Feed) -->
+                <!-- Image Gallery (Your Specific Pinterest Feed) -->
                 <div class="space-y-6">
                     <div class="flex items-center gap-3 mb-4">
                         <i class="fab fa-pinterest text-red-600 text-3xl"></i>
                         <h3 class="text-2xl font-bold">Photo Highlights</h3>
                     </div>
                     <div class="bg-white p-4 rounded-3xl shadow-lg min-h-[500px]">
-                        <!-- Elfsight Pinterest Feed Widget -->
-                        <!-- Note: You will need to replace the ID with your actual widget ID from elfsight.com -->
-                        <div class="elfsight-app-5825391d-555e-4e94-8742-997539076597" data-elfsight-app-lazy></div>
-                        <!-- Fallback message if widget ID is not set -->
-                        <div class="flex flex-col items-center justify-center h-full text-slate-400 p-8 text-center space-y-4">
-                             <i class="fas fa-images text-6xl opacity-20"></i>
-                             <p>Connect your Pinterest account to display live photo feed here.</p>
-                        </div>
+                        <!-- Your Elfsight Pinterest Feed Widget -->
+                        <div class="elfsight-app-0dc7c6fd-a4fb-443a-91bc-425256dc4e76" data-elfsight-app-lazy></div>
                     </div>
                 </div>
 
@@ -184,7 +179,7 @@
                                     <i class="fas fa-play ml-1"></i>
                                 </button>
                             </div>
-                            <img src="https://0dc7c6fda4fb443a91bc425256dc4e76.elf.site" alt="Video cover">
+                            <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=800" class="w-full h-full object-cover opacity-60" alt="Video cover">
                         </div>
                         <!-- Video List -->
                         <div class="grid grid-cols-2 gap-4">
